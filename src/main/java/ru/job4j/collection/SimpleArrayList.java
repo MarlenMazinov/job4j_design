@@ -16,12 +16,9 @@ public class SimpleArrayList<T> implements List<T> {
         this.container = (T[]) new Object[capacity];
     }
 
-    @Override
-    public void add(T value) {
-        if (size < container.length) {
-            container[size] = value;
-            modCount++;
-            size++;
+    private void increaseContainer(T value) {
+        if (container.length == 0) {
+            container = Arrays.copyOf(container, 10);
         } else {
             container = Arrays.copyOf(container, container.length * 2);
             container[size] = value;
@@ -31,17 +28,27 @@ public class SimpleArrayList<T> implements List<T> {
     }
 
     @Override
+    public void add(T value) {
+
+        if (size >= container.length) {
+            increaseContainer(value);
+        } else {
+            container[size] = value;
+            modCount++;
+            size++;
+        }
+    }
+
+    @Override
     public T set(int index, T newValue) {
-        Objects.checkIndex(index, container.length);
-        T rsl = container[index];
+        T rsl = get(index);
         container[index] = newValue;
         return rsl;
     }
 
     @Override
     public T remove(int index) {
-        Objects.checkIndex(index, container.length);
-        T rsl = container[index];
+        T rsl = get(index);
         System.arraycopy(container, index + 1, container, index, container.length - index - 1);
         container[container.length - 1] = null;
         modCount++;
@@ -51,7 +58,7 @@ public class SimpleArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        Objects.checkIndex(index, container.length);
+        Objects.checkIndex(index, size);
         return container[index];
     }
 
@@ -71,7 +78,7 @@ public class SimpleArrayList<T> implements List<T> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return size > 0 && count < size;
+                return count < size;
             }
 
             @Override
