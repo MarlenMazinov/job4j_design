@@ -20,9 +20,8 @@ public class SimpleQueue<T> {
                 counterOut++;
             }
         }
-        rsl = out.pop();
         counterOut--;
-        return rsl;
+        return out.pop();
     }
 
     public void push(T value) {
