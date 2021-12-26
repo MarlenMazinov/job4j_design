@@ -3,8 +3,8 @@ package ru.job4j.collection;
 import java.util.NoSuchElementException;
 
 public class SimpleQueue<T> {
-    private SimpleStack<T> in = new SimpleStack<>();
-    private SimpleStack<T> out = new SimpleStack<>();
+    private final SimpleStack<T> in = new SimpleStack<>();
+    private final SimpleStack<T> out = new SimpleStack<>();
     private int counterIn = 0;
     private int counterOut = 0;
 
@@ -13,16 +13,18 @@ public class SimpleQueue<T> {
         if (counterIn == 0) {
             throw new NoSuchElementException();
         }
-        while (counterIn > 1) {
+        while (counterIn > 0) {
             out.push(in.pop());
             counterIn--;
             counterOut++;
         }
-        rsl = in.pop();
-        in = out;
-        out = new SimpleStack<>();
-        counterIn = counterOut;
-        counterOut = 0;
+        rsl = out.pop();
+        counterOut--;
+        while (counterOut > 0) {
+            in.push(out.pop());
+            counterOut--;
+            counterIn++;
+        }
         return rsl;
     }
 
