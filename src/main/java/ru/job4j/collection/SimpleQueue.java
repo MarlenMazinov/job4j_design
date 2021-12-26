@@ -9,7 +9,6 @@ public class SimpleQueue<T> {
     private int counterOut = 0;
 
     public T poll() {
-        T rsl = null;
         if (counterIn == 0 && counterOut == 0) {
             throw new NoSuchElementException();
         }
