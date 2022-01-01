@@ -2,7 +2,6 @@ package ru.job4j.collection.map;
 
 import java.util.*;
 
-//@SupressWargnins("checkstyle:EqualsAndHashCodeCheck")
 public class User {
     private String name;
     private int children;
