@@ -19,18 +19,19 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean put(K key, V value) {
-        if (modCount >= capacity * LOAD_FACTOR) {
+        if (count >= capacity * LOAD_FACTOR) {
             expand();
-            capacity = table.length;
         }
         int index = indexFor(hash(key.hashCode()));
+        boolean rsl = true;
         if (table[index] != null
                 && !table[index].key.equals(key)) {
-            return false;
+            rsl = false;
+        } else {
+            table[index] = new MapEntry<>(key, value);
+            count++;
         }
-        table[index] = new MapEntry<>(key, value);
-        modCount++;
-        return true;
+        return rsl;
     }
 
     private int hash(int hashCode) {
@@ -42,12 +43,20 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private void expand() {
-        table = Arrays.copyOf(table, capacity * 2);
+        capacity *= 2;
+        MapEntry<K, V>[] newTable = new MapEntry[capacity];
+        for (MapEntry<K, V> elem : table) {
+            if (elem != null) {
+                int index = indexFor(hash(elem.key.hashCode()));
+                newTable[index] = elem;
+            }
+        }
+        table = newTable;
+        modCount++;
     }
 
     @Override
     public V get(K key) {
-        V rsl = null;
         int index = indexFor(hash(key.hashCode()));
         return table[index] == null || !table[index].key.equals(key)
                 ? null : table[index].value;
@@ -59,7 +68,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
         int index = indexFor(hash(key.hashCode()));
         if (table[index].key.equals(key)) {
             table[index] = null;
-            modCount--;
+            count--;
             rsl = true;
         }
         return rsl;
@@ -68,6 +77,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public Iterator<K> iterator() {
         return new Iterator<>() {
+            int localCount = 0;
             int expectedModCount = modCount;
 
             @Override
@@ -75,10 +85,10 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                while (count < capacity && table[count] == null) {
-                    count++;
+                while (localCount < capacity && table[localCount] == null) {
+                    localCount++;
                 }
-                return count < capacity;
+                return localCount < capacity;
             }
 
             @Override
@@ -86,7 +96,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return table[count++].key;
+                return table[localCount++].key;
             }
         };
     }
@@ -99,29 +109,5 @@ public class SimpleMap<K, V> implements Map<K, V> {
             this.key = key;
             this.value = value;
         }
-    }
-
-    public static void main(String[] args) {
-        SimpleMap<Integer, String> map = new SimpleMap<>();
-        map.put(1, "Petr");
-        map.put(2, "Ivan");
-        map.put(3, "Igor");
-        map.put(4, "Fedor");
-        map.put(5, "Marat");
-        map.put(6, "Robert");
-        map.put(7, "Inna");
-        map.put(8, "Oleg");
-        map.put(9, "Vasiliy");
-
-        for (MapEntry<Integer, String> a : map.table) {
-            if (a == null) {
-                System.out.println("xxx");
-                continue;
-            }
-            System.out.println(a.value);
-            System.out.println(map.indexFor(map.hash(a.key.hashCode())));
-        }
-
-        System.out.println(map.capacity);
     }
 }
