@@ -16,17 +16,16 @@ public class SimpleMapTest {
     @Test
     public void whenAddThreeElement() {
         Map<Integer, String> map = new SimpleMap<>();
-        map.put(1, "Petr");
         assertTrue(map.put(1, "Petr"));
         assertTrue(map.put(2, "Ivan"));
         assertTrue(map.put(3, "Igor"));
     }
 
     @Test
-    public void whenUpdateElement() {
+    public void whenCellNotEmpty() {
         Map<Integer, String> map = new SimpleMap<>();
         map.put(1, "Petr");
-        assertTrue(map.put(1, "Elena"));
+        assertFalse(map.put(1, "Elena"));
     }
 
     @Test

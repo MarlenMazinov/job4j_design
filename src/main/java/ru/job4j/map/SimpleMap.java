@@ -24,12 +24,12 @@ public class SimpleMap<K, V> implements Map<K, V> {
         }
         int index = indexFor(hash(key.hashCode()));
         boolean rsl = true;
-        if (table[index] != null
-                && !table[index].key.equals(key)) {
+        if (table[index] != null) {
             rsl = false;
         } else {
             table[index] = new MapEntry<>(key, value);
             count++;
+            modCount++;
         }
         return rsl;
     }
@@ -69,6 +69,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
         if (table[index].key.equals(key)) {
             table[index] = null;
             count--;
+            modCount++;
             rsl = true;
         }
         return rsl;
