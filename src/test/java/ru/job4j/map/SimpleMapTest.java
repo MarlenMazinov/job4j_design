@@ -2,7 +2,10 @@ package ru.job4j.map;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 
@@ -39,7 +42,7 @@ public class SimpleMapTest {
         assertTrue(map.put(8, "Mary"));
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test
     public void whenAddInFullTable() {
         Map<Integer, String> map = new SimpleMap<>();
         map.put(1, "Petr");
@@ -49,8 +52,17 @@ public class SimpleMapTest {
         map.put(5, "Marat");
         map.put(6, "Robert");
         map.put(7, "Inna");
-        map.put(8, "Mary");
-        map.put(9, "Petr");
+        map.put(8, "Oleg");
+        map.put(9, "Vasiliy");
+        List<String> list = new ArrayList<>();
+        for (int i = 1; i < 10; i++) {
+            list.add(map.get(i));
+        }
+        boolean rsl = false;
+        for (int i = 1; i < 10; i++) {
+            rsl = list.contains(map.get(i));
+        }
+        assertTrue(rsl);
     }
 
     @Test
@@ -93,5 +105,20 @@ public class SimpleMapTest {
         map.put(3, "Igor");
         map.remove(1);
         assertNull(map.get(1));
+    }
+
+    @Test
+    public void whenIteratorPassEmptyCells() {
+        Map<Integer, String> map = new SimpleMap<>();
+        map.put(1, "Petr");
+        map.put(2, "Ivan");
+        map.put(3, "Igor");
+        Iterator<Integer> itr = map.iterator();
+        int count = 0;
+        while (itr.hasNext()) {
+            itr.next();
+            count++;
+        }
+        assertThat(count, is(3));
     }
 }
