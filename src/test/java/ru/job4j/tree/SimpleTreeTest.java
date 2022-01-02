@@ -14,14 +14,6 @@ public class SimpleTreeTest {
     }
 
     @Test
-    public void whenTryAddThirdElementInNode() {
-        Tree<Integer> tree = new SimpleTree<>(1);
-        assertTrue(tree.add(1, 2));
-        assertTrue(tree.add(1, 3));
-        assertFalse(tree.add(1, 4));
-    }
-
-    @Test
     public void whenFindAllAddedElements() {
         Tree<Integer> tree = new SimpleTree<>(1);
         tree.add(1, 4);
