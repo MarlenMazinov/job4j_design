@@ -18,8 +18,11 @@ public class Config {
         try (BufferedReader in = new BufferedReader(new FileReader(path))) {
             in.lines().forEach(line -> {
                 if (!line.equals("") && !line.contains("#")) {
+                    if (line.indexOf("=") != line.lastIndexOf("=")) {
+                        throw new IllegalArgumentException();
+                    }
                     String[] arr = line.split("=");
-                    if (arr.length < 2) {
+                    if (arr.length < 2 || arr[0].equals("")) {
                         throw new IllegalArgumentException();
                     }
                     values.put(arr[0], arr[1]);

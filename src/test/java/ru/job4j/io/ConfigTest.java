@@ -25,8 +25,32 @@ public class ConfigTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void whenPairIsNotFull() {
-        String path = "./data/pair_is_not_full.properties";
+    public void whenMoreThanOneEquals() {
+        String path = "./data/line_contains_more_than_one_equals.properties";
+        Config config = new Config(path);
+        config.load();
+        config.value("name");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenEqualsIsAbsent() {
+        String path = "./data/equals_is_absent.properties";
+        Config config = new Config(path);
+        config.load();
+        config.value("name");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenKeyIsAbsent() {
+        String path = "./data/key_is_absent.properties";
+        Config config = new Config(path);
+        config.load();
+        config.value("name");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenValueIsAbsent() {
+        String path = "./data/value_is_absent.properties";
         Config config = new Config(path);
         config.load();
         config.value("name");
