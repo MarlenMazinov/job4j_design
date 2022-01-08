@@ -14,12 +14,12 @@ public class Analizy {
             while ((read = in.readLine()) != null) {
                 if (counter == 0) {
                     if (read.startsWith("400") || read.startsWith("500")) {
-                        stringBuilder.append(read.substring(4)).append("; ");
+                        stringBuilder.append(read.substring(4));
                         counter++;
                     }
                 } else {
                     if (!read.startsWith("400") && !read.startsWith("500")) {
-                        stringBuilder.append(read.substring(4)).append("\n");
+                        stringBuilder.append("; ").append(read.substring(4)).append("\n");
                         counter = 0;
                     }
                 }
