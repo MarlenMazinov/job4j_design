@@ -1,13 +1,13 @@
 package ru.job4j.io;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.*;
+
 public class AnalizyTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
@@ -26,7 +26,7 @@ public class AnalizyTest {
         try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             in.lines().forEach(rsl::append);
         }
-        assertThat(rsl.toString(), is(""));
+        assertEquals(rsl.toString(), "");
     }
 
     @Test
@@ -43,7 +43,7 @@ public class AnalizyTest {
         try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             in.lines().forEach(rsl::append);
         }
-        assertThat(rsl.toString(), is("10:56:01; 10:57:01"));
+        assertEquals(rsl.toString(), "10:56:01; 10:57:01");
     }
 
     @Test
@@ -60,7 +60,7 @@ public class AnalizyTest {
         try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             in.lines().forEach(rsl::append);
         }
-        assertThat(rsl.toString(), is("10:56:01; 10:57:01"));
+        assertEquals(rsl.toString(), "10:56:01; 10:57:01");
     }
 
     @Test
@@ -77,7 +77,7 @@ public class AnalizyTest {
         try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             in.lines().forEach(rsl::append);
         }
-        assertThat(rsl.toString(), is("10:57:01"));
+        assertEquals(rsl.toString(), "10:57:01");
     }
 
     @Test
@@ -98,6 +98,6 @@ public class AnalizyTest {
         try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             in.lines().forEach(rsl::append);
         }
-        assertThat(rsl.toString(), is("10:57:01; 10:58:0110:59:01; 11:01:01"));
+        assertEquals(rsl.toString(), "10:57:01; 10:58:0110:59:01; 11:01:01");
     }
 }
