@@ -14,6 +14,7 @@ import java.util.Map;
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
     Map<FileProperty, List<Path>> tmpMap = new HashMap<>();
     Map<FileProperty, List<Path>> rslMap = new HashMap<>();
+    List<FileProperty> list = new ArrayList<>();
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
@@ -29,18 +30,20 @@ public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
                 List<Path> newList = new ArrayList<>();
                 newList.add(file);
                 tmpMap.put(fileProperty, newList);
+                list.add(fileProperty);
             }
-
-            tmpMap.forEach((k, v) -> {
-                if (tmpMap.get(k).size() > 1) {
-                    rslMap.put(k, v);
-                }
-            });
         }
         return super.visitFile(file, attrs);
     }
 
     public Map<FileProperty, List<Path>> getMap() {
-        return rslMap;
+        list.forEach(k -> {
+            if (tmpMap.containsKey(k)) {
+                if (tmpMap.get(k).size() < 2) {
+                    tmpMap.remove(k);
+                }
+            }
+        });
+        return tmpMap;
     }
 }
