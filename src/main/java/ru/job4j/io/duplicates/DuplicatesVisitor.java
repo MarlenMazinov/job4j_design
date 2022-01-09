@@ -22,9 +22,7 @@ public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
             FileProperty fileProperty = new FileProperty(currentFile.length(),
                     currentFile.getName());
             if (tmpMap.containsKey(fileProperty)) {
-                List<Path> list = tmpMap.get(fileProperty);
-                list.add(file);
-                tmpMap.replace(fileProperty, list);
+                tmpMap.get(fileProperty).add(file);
             } else {
                 List<Path> newList = new ArrayList<>();
                 newList.add(file);
