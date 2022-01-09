@@ -13,7 +13,6 @@ import java.util.Map;
 
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
     Map<FileProperty, List<Path>> tmpMap = new HashMap<>();
-    Map<FileProperty, List<Path>> rslMap = new HashMap<>();
     List<FileProperty> list = new ArrayList<>();
 
     @Override
