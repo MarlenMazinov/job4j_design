@@ -29,4 +29,19 @@ public class ArgsNameTest {
     public void whenWrongSomeArgument() {
         ArgsName jvm = ArgsName.of(new String[]{"-enconding=UTF-8", "-Xmx="});
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenAbsentKey() {
+        ArgsName jvm = ArgsName.of(new String[]{"-enconding=UTF-8", "=512"});
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenKeyWithoutMinus() {
+        ArgsName jvm = ArgsName.of(new String[]{"-enconding=UTF-8", "Xmx=512"});
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenTwoOrMoreEqualSign() {
+        ArgsName jvm = ArgsName.of(new String[]{"-enconding=UTF-8", "-Xmx==512"});
+    }
 }
