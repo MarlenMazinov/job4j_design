@@ -1,5 +1,6 @@
 package ru.job4j.io;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,18 +17,40 @@ public class ArgsName {
     }
 
     private void parse(String[] args) {
+        if (Arrays.asList(args).isEmpty()) {
+            throw new IllegalArgumentException("No arguments.");
+        }
         for (String arg : args) {
             if (arg != null) {
-                String[] key = arg.split("=");
-                if (key.length != 2) {
-                    throw new IllegalArgumentException();
-                }
-                key[0] = key[0].replaceFirst("-", "");
-                values.put(key[0], key[1]);
+                String[] arr = patternMatching(arg);
+                arr[0] = arr[0].replaceFirst("-", "");
+                values.put(arr[0], arr[1]);
             } else {
                 break;
             }
         }
+    }
+
+    private String[] patternMatching(String arg) {
+        String[] arr;
+        if (arg.contains("=")) {
+            if (arg.indexOf("=") != arg.lastIndexOf("=")) {
+                throw new IllegalArgumentException("Argument must contain only one \"=\".");
+            }
+            if (arg.startsWith("=") || arg.endsWith("=")) {
+                throw new IllegalArgumentException("Argument isn't complete.");
+            }
+            if (arg.contains(" ")) {
+                throw new IllegalArgumentException("Argument mustn't contain spaces.");
+            }
+            arr = arg.split("=");
+            if (!arr[0].contains("-")) {
+                throw new IllegalArgumentException("First part of argument must start with\"-\".");
+            }
+        } else {
+            throw new IllegalArgumentException("Argument must be separated by \"=\".");
+        }
+        return arr;
     }
 
     public static ArgsName of(String[] args) {
