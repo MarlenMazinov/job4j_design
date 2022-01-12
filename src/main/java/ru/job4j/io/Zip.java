@@ -12,22 +12,19 @@ public class Zip {
     public static void packFiles(List<File> sources, File target) {
         try (ZipOutputStream zip =
                      new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
-            sources.forEach(file -> {
+            for (File file : sources) {
                 try (BufferedInputStream out =
                              new BufferedInputStream(new FileInputStream(file))) {
                     zip.putNextEntry(new ZipEntry(file.getPath()));
                     zip.write(out.readAllBytes());
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            });
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) throws IOException {
-
+    public static void patternMatching(String[] args) {
         if (args.length != 3) {
             throw new IllegalArgumentException("Number of arguments must be equal to three.");
         }
@@ -38,7 +35,11 @@ public class Zip {
         if (!Paths.get(names.get("d")).toFile().isDirectory()) {
             throw new IllegalArgumentException(names.get("d") + "isn't directory.");
         }
+    }
 
+    public static void main(String[] args) throws IOException {
+        ArgsName names = ArgsName.of(args);
+        patternMatching(args);
         List<File> list = new ArrayList<>();
         Search.search(Paths.get(names.get("d")),
                         p -> !p.toFile().getName().endsWith(names.get("e"))).
