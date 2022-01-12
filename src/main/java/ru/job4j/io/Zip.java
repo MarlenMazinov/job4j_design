@@ -31,17 +31,18 @@ public class Zip {
         if (args.length != 3) {
             throw new IllegalArgumentException("Number of arguments must be equal to three.");
         }
-        if (!Paths.get(ArgsName.of(args).get("d")).toFile().exists()) {
+        ArgsName names = ArgsName.of(args);
+        if (!Paths.get(names.get("d")).toFile().exists()) {
             throw new IllegalArgumentException("No such directories exist.");
         }
-        if (!Paths.get(ArgsName.of(args).get("d")).toFile().isDirectory()) {
-            throw new IllegalArgumentException(ArgsName.of(args).get("d") + "isn't directory.");
+        if (!Paths.get(names.get("d")).toFile().isDirectory()) {
+            throw new IllegalArgumentException(names.get("d") + "isn't directory.");
         }
 
         List<File> list = new ArrayList<>();
-        Search.search(Paths.get(ArgsName.of(args).get("d")),
-                        p -> !p.toFile().getName().endsWith(ArgsName.of(args).get("e"))).
+        Search.search(Paths.get(names.get("d")),
+                        p -> !p.toFile().getName().endsWith(names.get("e"))).
                 forEach(p -> list.add(new File(p.toFile().getPath())));
-        packFiles(list, new File(ArgsName.of(args).get("o")));
+        packFiles(list, new File(names.get("o")));
     }
 }
