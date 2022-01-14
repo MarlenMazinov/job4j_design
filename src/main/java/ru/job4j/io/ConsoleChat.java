@@ -28,9 +28,9 @@ public class ConsoleChat {
         Scanner in = new Scanner(System.in);
         String str = in.nextLine();
         String answer;
-        while (!str.equals(OUT)) {
-            if (str.equals(STOP)) {
-                while (!str.equals(CONTINUE)) {
+        while (!OUT.equals(str)) {
+            if (STOP.equals(str)) {
+                while (!CONTINUE.equals(str)) {
                     log.add(str);
                     str = in.nextLine();
                 }
