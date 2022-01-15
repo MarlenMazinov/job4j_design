@@ -16,8 +16,8 @@ public class UsageLog4j {
         long longArg = 35000;
         float floatArg = 68000.00f;
         double doubleArg = 100000.05;
-        LOG.debug("booleanArg : {}, charArg : {}, byteArg : {}, shortArg : {}, intArg : {}," +
-                        " longArg : {}, floatArg : {}, doubleArg : {}",
+        LOG.debug("booleanArg : {}, charArg : {}, byteArg : {}, shortArg : {}, intArg : {},"
+                        + " longArg : {}, floatArg : {}, doubleArg : {}",
                 booleanArg, charArg, byteArg, shortArg, intArg, longArg, floatArg, doubleArg);
     }
 }
