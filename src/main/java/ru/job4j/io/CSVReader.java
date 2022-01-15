@@ -1,6 +1,7 @@
 package ru.job4j.io;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,6 +13,9 @@ public class CSVReader {
             throw new IllegalArgumentException("Number of arguments must be equal to four.");
         }
         ArgsName argsName = ArgsName.of(args);
+        if (!Paths.get(argsName.get("path")).toFile().exists()) {
+            throw new IllegalArgumentException("No such files exist.");
+        }
         handle(argsName);
     }
 
@@ -34,13 +38,11 @@ public class CSVReader {
                 listOfLists.get(i).add(scanner.next());
             }
         }
-        int firstIndex = 0;
-        int secondIndex = 0;
         String[] filterArr = argsName.get("filter").split(",");
         int[] columnsArr = new int[filterArr.length];
         for (String field : listOfLists.get(0)) {
             for (int i = 0; i < columnsArr.length; i++) {
-                if (field.equals(filterArr[i])) {
+                if (filterArr[i].equals(field)) {
                     columnsArr[i] = listOfLists.get(0).indexOf(field);
                 }
             }
@@ -54,7 +56,7 @@ public class CSVReader {
             joiner.add(lineJoiner.toString());
         }
         joiner.add("");
-        if (argsName.get("out").equals("stdout")) {
+        if ("stdout".equals(argsName.get("out"))) {
             System.out.println(joiner);
         } else {
             try (PrintWriter pw = new PrintWriter(new FileWriter(argsName.get("out")))) {
