@@ -1,0 +1,8 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<account id="152" name="User#1" isActive="false">
+    <contact email="user1@mail.ru"/>
+    <usageServices>
+        <usageService>Netflix</usageService>
+        <usageService>YouTube</usageService>
+    </usageServices>
+</account>
