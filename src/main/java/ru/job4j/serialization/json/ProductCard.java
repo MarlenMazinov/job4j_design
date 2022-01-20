@@ -17,6 +17,18 @@ public class ProductCard {
         this.warehouses = warehouses;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean getIsPresent() {
+        return isPresent;
+    }
+
     @Override
     public String toString() {
         return "ProductCard{" + "id=" + id + ", name='" + name + '\''
