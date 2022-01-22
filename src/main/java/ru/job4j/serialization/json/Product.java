@@ -11,6 +11,18 @@ public class Product {
         this.weight = weight;
     }
 
+    public String getModel() {
+        return model;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    public String getWeight() {
+        return Double.toString(weight);
+    }
+
     @Override
     public String toString() {
         return "Product{" + "model='" + model + '\'' + ", colour='" + colour + '\''

@@ -29,6 +29,14 @@ public class ProductCard {
         return isPresent;
     }
 
+    public String[] getWarehouses() {
+        return warehouses;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
     @Override
     public String toString() {
         return "ProductCard{" + "id=" + id + ", name='" + name + '\''
