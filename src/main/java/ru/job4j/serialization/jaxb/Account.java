@@ -3,7 +3,10 @@ package ru.job4j.serialization.jaxb;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.*;
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
 
@@ -25,7 +28,8 @@ public class Account {
     public Account() {
     }
 
-    public Account(int id, String name, boolean isActive, Contact contact, String[] usageServices) {
+    public Account(int id, String name, boolean isActive, Contact contact,
+                   String[] usageServices) {
         this.id = id;
         this.name = name;
         this.isActive = isActive;
@@ -33,7 +37,7 @@ public class Account {
         this.usageServices = usageServices;
     }
 
-    public static void main(String[] args) throws JAXBException {
+    public static void main(String[] args) throws JAXBException, IOException {
 
         final Account account = new Account(152, "User#1", false, new Contact("user1@mail.ru"),
                 new String[]{"Netflix", "Youtube"});
@@ -41,13 +45,16 @@ public class Account {
         JAXBContext context = JAXBContext.newInstance(Account.class);
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
+        String xml;
         try (StringWriter writer = new StringWriter()) {
             marshaller.marshal(account, writer);
-            String result = writer.getBuffer().toString();
+            xml = writer.getBuffer().toString();
+            System.out.println(xml);
+        }
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        try (StringReader reader = new StringReader(xml)) {
+            Account result = (Account) unmarshaller.unmarshal(reader);
             System.out.println(result);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
