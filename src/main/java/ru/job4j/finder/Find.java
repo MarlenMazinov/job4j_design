@@ -14,24 +14,17 @@ import ru.job4j.io.Search;
 
 public class Find {
     public static void main(String[] args) throws IOException {
-        if (args.length != 4) {
-            throw new IllegalArgumentException("Number of arguments must be equal to four.");
-        }
+        validate(args);
         ArgsName argsName = ArgsName.of(args);
-        if (!Paths.get(argsName.get("d")).toFile().isDirectory()) {
-            throw new IllegalArgumentException("First argument must be directory.");
-        }
-        if (!argsName.get("o").equals("log1.txt")) {
-            throw new IllegalArgumentException("Last argument must be log.txt");
-        }
         List<Path> rsl = new ArrayList<>();
         if (argsName.get("t").equals("name")) {
             rsl = Search.search(Paths.get(argsName.get("d")),
-                    p -> p.toFile().getName().equals(argsName.get("n")));
+                    p -> argsName.get("n").equals(p.toFile().getName()));
         }
         if (argsName.get("t").equals("mask")) {
             rsl = Search.search(Paths.get(argsName.get("d")),
-                    p -> p.toFile().getName().contains(argsName.get("n").replaceFirst("\\*", "")));
+                    p -> p.toFile().getName().contains(argsName.get("n").
+                            replaceFirst("\\?", "").replaceFirst("\\*", "")));
         }
         if (argsName.get("t").equals("regex")) {
             Pattern pattern = Pattern.compile(argsName.get("n"));
@@ -42,6 +35,19 @@ public class Find {
             rsl.forEach(pw::println);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void validate(String[] args) {
+        if (args.length != 4) {
+            throw new IllegalArgumentException("Number of arguments must be equal to four.");
+        }
+        ArgsName argsName = ArgsName.of(args);
+        if (!Paths.get(argsName.get("d")).toFile().isDirectory()) {
+            throw new IllegalArgumentException("First argument must be directory.");
+        }
+        if (!argsName.get("o").equals("log1.txt")) {
+            throw new IllegalArgumentException("Last argument must be log.txt");
         }
     }
 }
