@@ -16,13 +16,18 @@ public class ImportDB {
         this.dump = dump;
     }
 
-    public List<User> load() throws IOException {
+    public List<User> load() {
         List<User> users = new ArrayList<>();
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
             rd.lines().forEach(line -> {
                 String[] arr = line.split(";");
+                if (arr.length != 2 || "".equals(arr[0]) || "".equals(arr[1])) {
+                    throw new IllegalArgumentException();
+                }
                 users.add(new User(arr[0], arr[1]));
             });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return users;
     }
@@ -59,10 +64,12 @@ public class ImportDB {
     }
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
         Properties cfg = new Properties();
         try (FileInputStream in = new FileInputStream("./app.properties")) {
             cfg.load(in);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         ImportDB db = new ImportDB(cfg, "./dump.txt");
         db.save(db.load());
