@@ -37,10 +37,9 @@ public class TableEditor implements AutoCloseable {
 
     public void createTable(String tableName) throws Exception {
         String sql = String.format(
-                "create table if not exists %s(%s, %s);",
+                "create table if not exists %s(%s);",
                 tableName,
-                "id serial primary key",
-                "name text"
+                "id serial primary key"
         );
         query(sql);
     }
@@ -117,19 +116,21 @@ public class TableEditor implements AutoCloseable {
 
     public static void main(String[] args) throws Exception {
         Properties properties = new Properties();
-        properties.load(new FileReader("./app.properties"));
-        TableEditor tableEditor = new TableEditor(properties);
-        String tableName = "demo_table";
-        tableEditor.createTable(tableName);
-        System.out.println(TableEditor.getTableScheme(tableEditor.connection, tableName));
-        tableEditor.addColumn(tableName, "age", "int");
-        System.out.println(TableEditor.getTableScheme(tableEditor.connection, tableName));
-        tableEditor.dropColumn(tableName, "age");
-        System.out.println(TableEditor.getTableScheme(tableEditor.connection, tableName));
-        tableEditor.renameColumn(tableName, "name", "new_name");
-        System.out.println(TableEditor.getTableScheme(tableEditor.connection, tableName));
-        tableEditor.dropTable(tableName);
-        System.out.println(TableEditor.getTableScheme(tableEditor.connection, tableName));
-        tableEditor.close();
+        try (FileReader fr = new FileReader("./app.properties")) {
+            properties.load(fr);
+        }
+        try (TableEditor tableEditor = new TableEditor(properties)) {
+            String tableName = "demo_table";
+            tableEditor.createTable(tableName);
+            System.out.println(TableEditor.getTableScheme(tableEditor.connection, tableName));
+            tableEditor.addColumn(tableName, "name", "text");
+            System.out.println(TableEditor.getTableScheme(tableEditor.connection, tableName));
+            tableEditor.dropColumn(tableName, "name");
+            System.out.println(TableEditor.getTableScheme(tableEditor.connection, tableName));
+            tableEditor.renameColumn(tableName, "id", "num");
+            System.out.println(TableEditor.getTableScheme(tableEditor.connection, tableName));
+            tableEditor.dropTable(tableName);
+            System.out.println(TableEditor.getTableScheme(tableEditor.connection, tableName));
+        }
     }
 }
